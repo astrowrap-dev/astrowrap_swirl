@@ -17,4 +17,15 @@ library(devtools)
 install_github("astrowrap", "astrowrap-dev")
 </pre>
 
+Once these pre-requisities are fulfilled, all astRowRap lessons can be installed using:
+
+<pre>library(swirl)
+install_course_github("astrowrap-dev", "astrowrap_swirl", multi=TRUE)
+</pre>
+
+After installing the lessons, key in 
+
+<pre>swirl()</pre>
+
+and follow the instructions thereafter to study a lesson of your choice.
 
