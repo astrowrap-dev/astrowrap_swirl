@@ -27,7 +27,7 @@ After installing the lessons, key in
 
 <pre>swirl()</pre>
 
-and follow the instructions thereafter to study a lesson of your choice.
+and follow the instructions thereafter. Installed course names seen therein correspond to folder names in the repository.
 
 Contact
 -------
