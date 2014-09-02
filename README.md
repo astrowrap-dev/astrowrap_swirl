@@ -29,3 +29,6 @@ After installing the lessons, key in
 
 and follow the instructions thereafter to study a lesson of your choice.
 
+Contact
+-------
+For any bugs/improvements/suggestions, please email us at __astrowrap.dev@gmail.com__.
