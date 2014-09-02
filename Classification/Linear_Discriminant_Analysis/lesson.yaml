@@ -1,0 +1,109 @@
+- Class: meta
+  Course: astRowRap
+  Lesson: lda
+  Author: Tejas Kale, Ashish Mahabal
+  Type: Coursera
+  Organization: 
+  Version: 0.1.2
+
+- Class: text
+  Output: Linear Discriminant Analysis (LDA) is a popular machine learning technique that aims to identify linear combinations of variables/features that best distinguish different classes or types of observations. Easy to understand and computationally cheap for small and medium-sized datasets, this technique finds application in multiple scenarios where a machine has to take decisions like determining if an online transaction is fraud or not.
+
+- Class: text
+  Output: Performing LDA in R is simple thanks to the 'lda' function from the library MASS. All we need to supply to the function is a list of variables that seem promising enough for classification of observations. 
+
+- Class: cmd_question
+  Output: Put in '?lda' to view the documentation. If you don't wish to view it now, enter 'skip()'
+  CorrectAnswer: ?lda
+  AnswerTests: omnitest(correctExpr="?lda")
+  Hint: Use the '?' shortcut
+
+- Class: text
+  Output: The CRTS data (crts_lcstat) provides about 20 statistics proposed by Richards et al. for analysing lightcurves. The data also contains classification of 3966 objects into 7 types of transients and non-variables. An outstanding problem in this regard is to create a classification algorithm that separates transients from the non-variables.
+
+- Class: cmd_question
+  Output: Let's see if LDA can help us in this classification problem. To begin with, import the data 'crts_lcstat' into R...
+  CorrectAnswer: data(crts_lcstat)
+  AnswerTests: omnitest(correctExpr="data(crts_lcstat)")
+  Hint: Use the function 'data()'
+
+- Class: cmd_question
+  Output: Next up, let's look at a quick description of the loaded data using the 'str' function (short for 'structure')...
+  CorrectAnswer: str(crts_lcstat)
+  AnswerTests: omnitest(correctExpr="str(crts_lcstat)")
+  Hint:
+
+- Class: text
+  Output: We see that the dataset has 23 variables with the first ('id') being a unique identifier of every object and the last ('class') denoting object type. We have objects of 8 types including AGN (Active Galactic Nuclei), Bl (Blazar), CV (Cataclysmic Variable star), Downes CV, Flare, NV (Non-Variable stars), RRLyrae, and SN (Super Novae).
+
+- Class: text
+  Output: We intend to run Linear Discriminant Analysis on this data to see if we can separate transients from the non-variables. To do this, we need the variable 'class' to have only two types.
+
+- Class: cmd_question
+  Output: Variable 'class' is a factor with 8 levels. Use the 'levels()' function to reduce it to 2 levels:- 'V' for Variable stars and 'NV' for Non-variable stars.
+  CorrectAnswer: levels(crts_lcstat$class) <- c(rep('V', 5), 'NV', rep('V', 2))
+  AnswerTests: omnitest(correctExpr="levels(crts_lcstat$class) <- c(rep('V', 5), 'NV', rep('V', 2))")
+  Hint: This one's a little tricky as we have to first know the order of factor levels. Type in 'levels(crts_lcstat$class) <- c(rep('V', 5), 'NV', rep('V', 2))' to get the job done!
+
+- Class: text
+  Output: Next up, we need to determine which variable(s) should be used in the analysis so as to get the best possible segregation between Variables and Non-variables. One way of doing this can be to compare the distribution of these types for every variable and choose those for which the difference in distribution is most significant. 
+
+- Class: cmd_question
+  Output: To plot the distributions, we need to load a plotting library. We highly recommend using the 'ggplot2' library for its easy syntax and aesthetically-pleasing plots. So go ahead and load 'ggplot2'...
+  CorrectAnswer: library(ggplot2)
+  AnswerTests: omnitest(correctExpr="library(ggplot2)")
+  Hint: Use the function 'install.packages()' if 'ggplot2' isn't installed in your machine.
+
+- Class: text
+  Output: Now, let us try to formulate a step by step guide for constructing a plot. We have a data (crts_lcstat) from which we need to generate the plots. Since we wish to compare distributions, a density plot needs to be constructed. Being a density plot, we can only supply one variable at a time and we wish to view density curve for every type of object (V and NV) 
+
+- Class: cmd_question
+  Output: Based on the guide above, can you construct a 'ggplot2' command to get the desired plot for the variable 'amplitude'? (If it's too much to ask from you, just enter 'skip()' and the right answer will appear for you)
+  CorrectAnswer: ggplot(data=crts_lcstat, aes(x=amplitude, colour=class, group=class)) + geom_density()
+  AnswerTests: omnitest(correctExpr="ggplot(data=crts_lcstat, aes(x=amplitude, colour=class, group=class)) + geom_density()")
+  Hint: Key in the following command:- "ggplot(data=crts_lcstat, aes(x=amplitude, colour=class, group=class)) + geom_density()"
+
+- Class: text
+  Output: Hope you now know how to make the density plot of a given variable. Our objective is to spot the variable that shows the most distinction in distribution of Variables and Non-Variables. Go ahead and tweak the 'ggplot2' command used to create the plot above to visualize the variable of interest.
+
+- Class: cmd_question
+  Output: Type in 'play()' to try out the different plots. Once done, put 'nxt()' in the console followed by 'skip()' to resume the lesson...
+  CorrectAnswer: dmp <- list()
+  AnswerTests: omnitest(correctExpr="dmp <- list()")
+  Hint: 
+
+- Class: text
+  Output: It seems that the parameter "Stetson's J" most differentiates Transients from Non-variables. (Ashish, can you add a line or two about Stetson's J?). Now, we need to provide this variable to LDA and check how good a job it does of distinguishing between the two object types. 
+
+- Class: text
+  Output: The 'lda' function accepts a formula in the form 'grouping variable ~ discriminant variable' as its first argument. In our case, the formula will be 'class ~ stet_j'. The second argument is the name of the dataframe containing these variables which in our case will be 'crts_lcstat'. A third argument we need to supply is "na.action='na.omit'" which will automatically drop any missing values and prevent the analysis from failing. A final argument to pass is 'CV=TRUE' which will help us in getting a prediction table of the analysis thereby highlighting its accuracy.
+
+- Class: cmd_question
+  Output: Go ahead and try to run LDA with the information provided above. If you can't, type in 'skip()' to view the correct answer.
+  CorrectAnswer: crts_lda_stetj <- lda(class ~ stet_j, data=crts_lcstat, na.action='na.omit', CV=TRUE)
+  AnswerTests: omnitest(correctExpr="crts_lda_stetj <- lda(class ~ stet_j, data=crts_lcstat, na.action='na.omit', CV=TRUE)")
+  Hint: The correct command is "crts_lda_stetj <- lda(class ~ stet_j, data=crts_lcstat, na.action='na.omit', CV=TRUE)".
+
+- Class: text
+  Output: Now that we have performed LDA with Stetson's J, a last step needed to be done is to check the efficiency of this parameter. It's tricky to execute but the results will be promising.
+
+- Class: text
+  Output: First up, we need to compare the classification performed by LDA with the actual classification. This can be done with the command 'table(crts_lcstat$class, crts_lda_stetj$class)'. But this will give us absolute numbers of classification and misclassification. Looking at proportions of these will be more useful...
+
+- Class: text
+  Output: We use the function 'prop.table' to get the proportions required. With this, our updated command will look as follows:- 'prop.table(table(crts_lcstat$class, crts_lda_stetj$class), 1)'. The '1' indicates that every cell of the table will be divided by its row sum to obtain the proportions.
+
+- Class: cmd_question
+  Output: Key in the command mentioned above and think about the results you get...
+  CorrectAnswer: prop.table(table(crts_lcstat$class, crts_lda_stetj$class), 1)
+  AnswerTests: omnitest(correctExpr="prop.table(table(crts_lcstat$class, crts_lda_stetj$class), 1)")
+  Hint: The command is "prop.table(table(crts_lcstat$class, crts_lda_stetj$class), 1)"
+
+- Class: text
+  Output: We can infer two things from the table:- prediction accuracy of variables (i.e. Transients) (90%) is much higher than that of Non-variables (54%) and while the data has almost equal population of Variables and Non-variables, LDA predicts the observations to be variables ~66% of the times. 
+ 
+- Class: text
+  Output: As a parting gift, you may try to carry forward the hunt for best variables in LDA by adding more variables to its formula and check for improvements in prediction accuracy.
+
+- Class: text
+  Output: Hope you had a good learning experience! A new lesson will be available soon... 
