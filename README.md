@@ -6,8 +6,15 @@ Introduction
 Installation
 ------------
 
-In order to study an astRowRap lesson, the R package 'swirl' must be installed. This can be done by executing the following command in the R console:
+In order to study an astRowRap lesson, the R packages 'swirl' and 'astRowRap' must be installed. This can be done by executing the following commands in the R console:
  
-<pre>install.packages("swirl")</pre>
+<pre># To install 'swirl'
+install.packages("swirl")
+
+# To install 'astRowRap'
+install.packages("devtools")
+library(devtools)
+install_github("astrowrap", "astrowrap-dev")
+</pre>
 
 
